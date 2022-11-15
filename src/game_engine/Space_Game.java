@@ -241,7 +241,7 @@ public class Space_Game {
 	 * that are not on the map
 	 * 
 	 * 
-	 * TODO delete the enemy projectiles as well
+	 * TODO: move projectile deletion to projectile class. Raise a flag here.
 	 */
 	private void deleteProjectiles() {		
 		ListIterator<Projectile> projIterator = playerProjectiles.listIterator();
