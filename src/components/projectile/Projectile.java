@@ -1,13 +1,14 @@
 package components.projectile;
 
 import components.Entity;
+import components.ships.Ship;
 
 public class Projectile extends Entity{
 	boolean isUp;
 	boolean isDiag;
 	boolean isLeft;
 	double speed;
-	
+	private int damage;
 	
 	public Projectile(boolean isUp, boolean isDiag, boolean isLeft, double speed, double xLoc, double yLoc , String imagePath) {
 		super(imagePath);
@@ -17,6 +18,7 @@ public class Projectile extends Entity{
 		this.speed = speed;
 		this.xloc = xLoc;
 		this.yloc = yLoc;
+		damage = 1;
 	}
 	
 	public void move() {
@@ -51,7 +53,17 @@ public class Projectile extends Entity{
 			}
 		}
 	}
-	
+
+	@Override
+	protected void collisonAction(Entity crashedInto) {
+		if(crashedInto instanceof Ship){
+			toBeDestroyed = true;
+		}
+		
+	}
+	public int getDamage(){
+		return damage;
+	}
 	
 	
 	

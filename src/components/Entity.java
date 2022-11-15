@@ -8,6 +8,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import components.ships.PlayerShip;
+
 public abstract class Entity {
 	
 	protected double xloc;
@@ -15,10 +17,13 @@ public abstract class Entity {
 	protected int width;
 	protected int height;
 	protected BufferedImage projection;
-	
+	protected boolean toBeDestroyed;
+	private static int XSIZE;
+	private static int YSIZE;
 	
 	
 	public Entity(String imagePath) {
+		toBeDestroyed = false;
 		try {
 			projection = ImageIO.read(new File(imagePath));
 			
@@ -42,10 +47,14 @@ public abstract class Entity {
 
 		if(checkIntersection(e1,e2)){
 			System.out.println("collision");
+			e1.collisonAction(e2);
+			e2.collisonAction(e1);
 			return true;
 		}
-		if(checkIntersection(e2, e2)){
+		else if(checkIntersection(e1, e2)){
 			System.out.println("collision");
+			e1.collisonAction(e2);
+			e2.collisonAction(e1);
 			return true;
 		}
 		return false;
@@ -65,6 +74,7 @@ public abstract class Entity {
 		double yUpper = inner.yloc + (double)inner.height;
 		
 		if(checkPoint(xLower, yLower, outer)){
+
 			return true;
 		}
 		else if(checkPoint(xLower, yUpper, outer)){
@@ -91,6 +101,22 @@ public abstract class Entity {
 		
 
 	}
+
+	protected abstract void collisonAction(Entity crashedInto);
+		
+	
+	
+	 
+	/***
+	 * checks bounds for an entity and sets the tobedestroyed 
+	 */
+	public void checkBounds(){
+		if((xloc < 0 - 10) || (xloc > XSIZE + 10)
+		|| (yloc < 0 - 10)|| (xloc > YSIZE + 10)){
+			toBeDestroyed = true;
+		}
+		
+	}
 	public double getxloc() {
 		return xloc;
 	}
@@ -102,7 +128,12 @@ public abstract class Entity {
 		return projection;
 	}
 	
-	
-	
+	public boolean getToBeDestroyed(){
+		return toBeDestroyed;
+	}
+	public static void setSize(int xsize, int ysize){
+		XSIZE = xsize;
+		YSIZE = ysize;
+	}
 }
 

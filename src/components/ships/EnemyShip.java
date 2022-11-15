@@ -9,9 +9,10 @@ import game_engine.MovementPattern;
 public class EnemyShip extends Ship {
 
 	
-	
+
 	MovementPattern howToMove;
 	private int id;
+	private int health;
 	
 	public EnemyShip(MovementPattern moveInstr, int id, String imagePath) {
 		super(imagePath);
@@ -19,6 +20,7 @@ public class EnemyShip extends Ship {
 		howToMove = moveInstr;
 		this.id = id;
 		move();
+		health = 3;
 	}
 	
 	public int getId() {
@@ -44,6 +46,9 @@ public class EnemyShip extends Ship {
 		return list;
 	}
 
+	public void checkBoundsForRemoval(){
+		
+	}
 	public void setxloc(double xloc){
 		this.xloc = xloc;
 		
@@ -52,5 +57,19 @@ public class EnemyShip extends Ship {
 		this.yloc = yloc;
 		
 	}
+
+	@Override
+	protected void collisonAction(Entity crashedInto) {
+		// TODO Auto-generated method stub
+		if(crashedInto instanceof Projectile){
+
+			Projectile hitProjectile = (Projectile) crashedInto;
+			health -= hitProjectile.getDamage();
+			if(health <= 0){
+				toBeDestroyed = true;
+			}
+		}
+	}
+	
 	
 }
